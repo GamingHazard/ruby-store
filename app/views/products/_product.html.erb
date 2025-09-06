@@ -1,0 +1,41 @@
+<%= link_to product_path(product), data: { turbo_frame: "product_details" } do %>
+  <div id="<%= dom_id product %>" class="w-full sm:w-auto">
+    <style>
+      /* Card uses background-image so overlays always sit on top */
+      #card {
+        /* your original clip-path + a fallback polygon for browsers that don't support xywh */
+        clip-path: xywh(0 5px 100% 100% round 20% 0);
+
+        /* background settings */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        cursor: pointer;
+
+      }
+
+      #card:hover {
+        /* on hover, scale the card up a bit */
+        transform: scale(1.05);
+        transition: transform 0.3s ease-in-out;
+      }
+
+
+      /* small helper to ensure the overlay is above everything */
+      #card .caption {
+        z-index: 20;
+      }
+    </style>
+
+    <div id="card" class="relative flex-wrap overflow-hidden bg-green-100 shadow-md w-55 h-72" style="background-image: url('<%= url_for(product.images.first) if product.images.attached? %>')">
+
+
+      <div class="absolute top-0 z-20 p-2 font-semibold text-center text-white rounded-lg right-2 caption bg-black/40">
+        <%= number_to_currency product.price %>
+      </div>
+    </div>
+
+
+
+  </div>
+<% end %>
