@@ -1,17 +1,24 @@
 Rails.application.routes.draw do
-  resources :products 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # Devise routes for admin authentication, scoped under /admin
+  devise_for :admins, path: 'admin'
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  # get "up" => "rails/health#show", as: :rails_health_check
+  # Public-facing routes
+  root "products#index"
+  # Note: Public can only view products. Management is in the admin namespace.
+  resources :products, only: [:index, :show] 
   get "about" => "pages#about", as: :about
 
+  # Admin dashboard and resources
+  namespace :admin do
+    root to: "products#index"
+    get "/sales", to: "dashboard#sales"
+    get "/settings", to: "dashboard#settings"
+    get "/users", to: "dashboard#users"
+    get "/messages", to: "dashboard#messages"
+    get "/notifications", to: "dashboard#notifications"
+    resources :products
+    resource :profile, only: [:show, :edit, :update]
+  end
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  root "products#index"
+   
 end

@@ -1,0 +1,9 @@
+<turbo-frame id="items" class="grid grid-cols-4 gap-4">
+  <% if products.any? %>
+    <% products.each do |product| %>
+      <%= render product %>
+    <% end %>
+  <% else %>
+    <p class="my-10 text-center">No products found.</p>
+  <% end %>
+</turbo-frame>
